@@ -5,6 +5,10 @@
   "main": "main.js",
   "author": "易绘",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wumingyuanxxx/test-upload-v2.git"
+  },
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder --win nsis --publish never",
