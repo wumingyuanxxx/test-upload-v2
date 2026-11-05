@@ -1,0 +1,63 @@
+{
+  "name": "yihui-listing-workbench",
+  "version": "0.2.0",
+  "description": "易绘电商采集上架工作台",
+  "main": "main.js",
+  "author": "易绘",
+  "license": "Apache-2.0",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis --publish never",
+    "release": "electron-builder --win nsis --publish always",
+    "check": "node --check main.js && node --check preload.js && node --check src/main/model-client.js && node --check src/main/database.js && node --check src/main/miaoshou.js && node --check src/main/oss.js"
+  },
+  "build": {
+    "appId": "com.yihui.listingworkbench",
+    "productName": "易绘上架工作台",
+    "artifactName": "yihui-listing-workbench-setup-${version}.${ext}",
+    "directories": {
+      "output": "release"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "wumingyuanxxx",
+        "repo": "test-upload-v2"
+      }
+    ],
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "src/main/**",
+      "database/**",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "deleteAppDataOnUninstall": false
+    }
+  },
+  "devDependencies": {
+    "electron": "^45.2.3",
+    "electron-builder": "^26.0.12"
+  },
+  "dependencies": {
+    "ali-oss": "^6.23.0",
+    "electron-updater": "^6.8.11",
+    "mysql2": "^3.24.5"
+  }
+}

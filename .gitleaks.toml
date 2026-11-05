@@ -1,0 +1,11 @@
+title = "易绘上架工作台密钥扫描"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "允许公开的本地演示登录账号"
+regexes = [
+  '''root / 123456''',
+  '''VALUES \('root', '123456', '本地管理员', 1\)'''
+]
