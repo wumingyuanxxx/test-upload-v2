@@ -11,6 +11,8 @@ permissions:
 jobs:
   release:
     runs-on: windows-latest
+    env:
+      GITLEAKS_VERSION: 8.30.1
     steps:
       - uses: actions/checkout@v6
         with:
@@ -26,12 +28,14 @@ jobs:
           if ("v$packageVersion" -ne "${{ github.ref_name }}") { throw "Tag and package.json version do not match." }
       - run: npm ci
       - run: npm run check
-      - uses: gitleaks/gitleaks-action@v3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_VERSION: 8.30.1
-          GITLEAKS_CONFIG: .gitleaks.toml
-          GITLEAKS_ENABLE_COMMENTS: "false"
+      - name: Install Gitleaks
+        shell: pwsh
+        run: |
+          Invoke-WebRequest "https://github.com/gitleaks/gitleaks/releases/download/v$env:GITLEAKS_VERSION/gitleaks_$env:GITLEAKS_VERSION`_windows_x64.zip" -OutFile gitleaks.zip
+          Expand-Archive gitleaks.zip -DestinationPath .tools -Force
+          Add-Content $env:GITHUB_PATH "$PWD\.tools"
+      - name: Scan tracked source
+        run: gitleaks detect --source . --config .gitleaks.toml --redact --no-banner
       - name: Build and publish
         run: npm run release
         env:
